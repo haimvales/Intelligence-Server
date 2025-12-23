@@ -57,10 +57,34 @@ async function deleteFile(filePath) {
 
 
 
+async function deleteFiles(arrFilePath) {
+  const filesToDelete = arrFilePath
+  try {
+    // Delete all files in parallel
+    await Promise.all(
+      filesToDelete.map(file =>
+        fs.unlink(file).catch(err => {
+          if (err.code !== 'ENOENT') {
+            console.error(`Error deleting ${file}:`, err);
+          }
+        })
+      )
+    );
+
+    console.log('Files deleted successfully');
+  } catch (err) {
+    console.error('Error during file deletion:', err);
+  }
+}
+
+
+
+
 export {
     fileJsonToArr,
     writeFileToJson,
     appendToFileText,
-    deleteFile
+    deleteFile,
+    deleteFiles
 }
     
