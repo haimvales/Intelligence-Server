@@ -1,4 +1,4 @@
-import { fileJsonToArr } from "../utils/utilsFile.js"
+import { fileJsonToArr, writeFileToJson } from "../utils/utilsFile.js"
 
 
 const getAllUsers = async (req, res) => {
@@ -10,11 +10,65 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+const createUser = async (req, res) => {
+    try {
+        const users = await fileJsonToArr("./db/userD.json")
+        if(!req.body.username || !req.body.password || Object.keys(req.body).length !== 2)
+            return res.status(400).json("Request Bad")
+        else{
+           const findUser = users.find((user) => {return user.username === req.body.username}) 
+            if(findUser !== undefined)
+                return res.status(409).json("Conflict")
+            else{
+            users.push(req.body)
+            await writeFileToJson("./db/userD.json",users)
+            return res.json({users:users})            
+            }
+        }
+    }catch (err){
+        return res.status(500).json({err:err})
+    }
+}
 
+const updeteUsers = async (req, res) => {
+    try {
+        const users = await fileJsonToArr("./db/userD.json")
+        const findUserIndex = users.findIndex((user) => {return user.username === req.params.username}) 
+        if(findUserIndex === -1)
+            return res.status(404).json("Not Found")
+        else{
+            users[findUserIndex].password = req.body.password
+            await writeFileToJson("./db/userD.json",users)
+            return res.json({users:users})
+        }
+    }catch (err){
+        return res.status(500).json({err:err})
+    }
+}
 
+const deleteUser = async (req, res) => {
+    try {
+        const users = await fileJsonToArr("./db/userD.json")
+        let a = req.params.username
+        console.log(a)
+        const findUserIndex = users.findIndex((user) => {return user.username === req.params.username}) 
+        if(findUserIndex === -1)
+            return res.status(404).json("Not Found")
+        else{
+            users.splice(findUserIndex,1)
+            await writeFileToJson("./db/userD.json",users)
+            return res.json({users:users})
+        }
+    }catch (err){
+        return res.status(500).json({err:err})
+    }
+}
 
 export {
-    getAllUsers
+    getAllUsers,
+    createUser,
+    updeteUsers,
+    deleteUser
 }
 
 
