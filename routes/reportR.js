@@ -1,15 +1,25 @@
 import express from "express";
-// import { addUser, deleteUser, getAllUsers, getPostById, updateUser } from "../ctrls/userC.js";
-// import { logger } from "../middlewares/logger.js";
-// import { validateUser } from "../middlewares/auth.js";
+
+import { validateUser } from "../middlerwares/userM.js";
+import { createReport, getAllReport, getReportById, updateReport,deleteReport } from "../ctrls/reportC.js";
+
+
 
 const router = express.Router();
 
 
-// router.get("/", logger, getAllUsers);
-// router.post("/:id/posts", logger, validateUser, getPostById);
-// router.post("/", logger, addUser);
-// router.put("/:id", updateUser);
-// router.delete("/:id", deleteUser);
+
+
+router.get("/",validateUser,getAllReport);
+router.get("/:id",validateUser,getReportById);
+router.post("/",validateUser,createReport);
+router.put("/:id",validateUser,updateReport);
+router.delete("/:id",validateUser,deleteReport);
+
+
+
+    
+    
+
 
 export default router;

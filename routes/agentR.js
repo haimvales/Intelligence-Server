@@ -1,15 +1,23 @@
 import express from "express";
-// import { addUser, deleteUser, getAllUsers, getPostById, updateUser } from "../ctrls/userC.js";
-// import { logger } from "../middlewares/logger.js";
-// import { validateUser } from "../middlewares/auth.js";
+
+import { validateUser } from "../middlerwares/userM.js";
+import { getAgentById, getAllAgent , createAgent,updeteAgent,deleteAgentById} from "../ctrls/agentC.js";
+
 
 const router = express.Router();
 
 
-// router.get("/", logger, getAllUsers);
-// router.post("/:id/posts", logger, validateUser, getPostById);
-// router.post("/", logger, addUser);
-// router.put("/:id", updateUser);
-// router.delete("/:id", deleteUser);
+
+
+router.get("/",validateUser,getAllAgent);
+router.get("/:id",validateUser,getAgentById);
+router.post("/",validateUser,createAgent);
+router.put("/:id",validateUser,updeteAgent);
+router.delete("/:id",validateUser,deleteAgentById);
+
+
+
+
+
 
 export default router;

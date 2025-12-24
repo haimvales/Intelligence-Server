@@ -13,8 +13,10 @@ const getAllUsers = async (req, res) => {
 const createUser = async (req, res) => {
     try {
         const users = await fileJsonToArr("./db/userD.json")
+        if(typeof(req.body.password) !== String)
+            return res.status(400).json("Bad Request")
         if(!req.body.username || !req.body.password || Object.keys(req.body).length !== 2)
-            return res.status(400).json("Request Bad")
+            return res.status(400).json("Bad Request")
         else{
            const findUser = users.find((user) => {return user.username === req.body.username}) 
             if(findUser !== undefined)
@@ -49,8 +51,6 @@ const updeteUsers = async (req, res) => {
 const deleteUser = async (req, res) => {
     try {
         const users = await fileJsonToArr("./db/userD.json")
-        let a = req.params.username
-        console.log(a)
         const findUserIndex = users.findIndex((user) => {return user.username === req.params.username}) 
         if(findUserIndex === -1)
             return res.status(404).json("Not Found")
